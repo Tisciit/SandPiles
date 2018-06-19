@@ -8,7 +8,7 @@ function setup() {
 
     noStroke();
 
-    pile = new Sandpile(100, 4);
+    pile = new Sandpile(101, 4);
     pile.add(pile.size / 2, pile.size / 2, 90000);
 
     createCanvas(pile.size * TSIZE, pile.size * TSIZE);
