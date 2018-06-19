@@ -1,6 +1,6 @@
 let pile;
 let colors;
-let skip = 5;
+let skip = 100;
 
 const TSIZE = 12;
 
