@@ -1,26 +1,38 @@
 let pile;
-let colors;
-let skip = 100;
+let skip;
+let oldmap;
 
-const TSIZE = 12;
+const TSIZE = 3;
 
 function setup() {
 
     noStroke();
 
-    pile = new Sandpile(201, 4);
-    pile.add(pile.size / 2, pile.size / 2, 90000);
+    let spreadMap = [
+        [1, 1, 1],
+        [1, 0, 1],
+        [1, 1, 1]
+    ]
 
-    createCanvas(pile.size * TSIZE, pile.size * TSIZE);
+    pile = new Sandpile(301, spreadMap);
+    pile.add(round(pile.size / 2), round(pile.size / 2), 200000);
+
+    createCanvas(pile.size * TSIZE, pile.size * TSIZE + 60);
+
+    skip = createSlider(0, 20, 0)
+    skip.position(10, pile.size * TSIZE + 5);
     frameRate(60);
 }
 
 function draw() {
-    background(90);
-    for (let a = -1; a < skip; a++) {
-        pile.topple();
+
+    if (pile.canTopple()) {
+        for (let a = 0; a < skip.value(); a++) {
+            pile.topple();
+        }
     }
     drawPile();
+    oldmap = pile.cells;
     //noLoop();
 }
 
@@ -38,27 +50,46 @@ function drawPile() {
     for (let i = 0; i < pile.size; i++) {
         for (let j = 0; j < pile.size; j++) {
 
-            let index = pile.cells[i][j];
+            if (!oldmap || pile.cells[i][j] != oldmap[i][j]) {
 
-            fill(255, 255, 255);
-            switch (index) {
-                case 0:
-                    fill(180, 180, 180);
-                    break;
+                switch (pile.cells[i][j]) {
+                    case 0:
+                        fill(255, 228, 196);
+                        break;
 
-                case 1:
-                    fill(0, 0, 0);
-                    break;
+                    case 1:
+                        fill(255, 218, 185);
+                        break;
 
-                case 2:
-                    fill(90, 255, 0);
-                    break;
+                    case 2:
+                        fill(244, 164, 96);
+                        break;
 
-                case 4:
-                    fill(120, 255, 120);
-                    break;
+                    case 3:
+                        fill(205, 183, 158);
+                        break;
+                    case 4:
+                        fill(255, 127, 80);
+                        break;
+                    case 5:
+                        fill(205, 91, 69);
+                        break;
+                    case 6:
+                        fill(255, 140, 0);
+                        break;
+                    case 7:
+                        fill(238, 118, 0);
+                        break;
+                    case 8:
+                        fill(139, 62, 47);
+                        break;
+                    default:
+                        fill(255, 165, 0);
+                        break;
+                }
+
+                rect(i * TSIZE, j * TSIZE, TSIZE, TSIZE);
             }
-            rect(i * TSIZE, j * TSIZE, TSIZE, TSIZE);
         }
     }
 }
